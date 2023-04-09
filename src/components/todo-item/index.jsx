@@ -1,16 +1,38 @@
-export const TodoItem = ({ id, text, isDone, onToggleTodo }) => {
+import { useDispatch } from 'react-redux'
+import { todoActions } from "../../store/todoSlice"
+import styled from "styled-components"
+
+const StyledLi = styled.li`
+  list-style: none;
+  margin-bottom: 6px;
+  
+  &:hover {
+    color: blue;
+  }
+  & input {
+    margin-right: 15px;
+    cursor: pointer;
+  }
+`
+
+const StyledSpan = styled.span`
+  text-decoration: ${(props) => props.isDone ? 'line-through' : 'none'};
+`
+
+export const TodoItem = ({ id, text, isDone }) => {
+  const dispatch = useDispatch()
   const handleToggleTodo = () => {
-    onToggleTodo?.(id)
+    dispatch(todoActions.toggleTodo(id))
   }
 
   return (
-    <li>
+    <StyledLi>
       <input
         type="checkbox"
         checked={isDone}
         onChange={handleToggleTodo}
       />
-      <span style={{ textDecoration: isDone ? 'line-through' : 'none' }}>{text}</span>
-    </li>
+      <StyledSpan isDone={isDone}>{text}</StyledSpan>
+    </StyledLi>
   )
 }
